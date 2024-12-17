@@ -1,0 +1,38 @@
+CREATE TABLE Authors (
+author_name VARCHAR(256) NOT NULL,
+Gender VARCHAR(24),
+AuthorID INTEGER PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE publisher (
+    Pub_ID INTEGER PRIMARY KEY NOT NULL,
+    Pub_name VARCHAR(250)
+);
+
+CREATE TABLE Book (
+BookID INTEGER PRIMARY KEY NOT NULL,
+Title VARCHAR(256), 
+Num_Pages INTEGER,
+Isbn VARCHAR(10),
+Publication_Date DATE, 
+Language_Code VARCHAR(12),
+Pub_ID INTEGER NOT NULL,
+FOREIGN KEY (Pub_ID) REFERENCES publisher(Pub_ID)
+);
+
+CREATE TABLE Book_Authors (
+    AuthorID INTEGER NOT NULL,
+    BookID INTEGER NOT NULL,
+    PRIMARY KEY (AuthorID, BookID),
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID),
+    FOREIGN KEY (BookID) REFERENCES Book(BookID)
+);
+
+CREATE TABLE Ratings (
+Rat_ID INTEGER PRIMARY KEY NOT NULL,
+Text_Review_Count INTEGER,
+Average_Rating DECIMAL (3,1) CHECK (Average_Rating BETWEEN 0 AND 5),
+Ratings_Count INTEGER,
+BookID INTEGER NOT NULL,
+FOREIGN KEY (BookID) REFERENCES Book(BookID)
+);
