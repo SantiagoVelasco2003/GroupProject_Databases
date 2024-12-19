@@ -36,3 +36,5 @@ Ratings_Count INTEGER,
 BookID INTEGER NOT NULL,
 FOREIGN KEY (BookID) REFERENCES Book(BookID)
 );
+
+
