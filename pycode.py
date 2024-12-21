@@ -1,5 +1,3 @@
-#pip install gender-guesser
-
 import gender_guesser.detector as gender
 import pandas as pd
 import psycopg2
@@ -11,11 +9,11 @@ d = gender.Detector()
 #Connect to database
 
 DATABASE_CONFIG = {
-    "dbname": "Goodreads",
+    "dbname": "WhateverIwant",
     "user": "postgres",
-    "password": "Boom",
+    "password": "Josef2804!",
     "host": "localhost",
-    "port": 5432,
+    "port": 5433,
 }
 
 
