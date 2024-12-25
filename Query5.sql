@@ -1,19 +1,25 @@
 -- undo 
- /*select b.title,b.language_code,r.average_rating,r.ratings_count, ((r.ratings_count*r.average_rating)/(select avg(ratings_count) from ratings)) as pop_score
-from (ratings as r join book as b on r.bookid=b.bookid) */
+SELECT
+	b.title,
+	b.language_code,
+	r.average_rating,r.ratings_count, 
+	((r.ratings_count*r.average_rating)/(SELECT AVG(ratings_count) FROM ratings)) AS pop_score
+FROM (ratings AS r JOIN book AS b ON r.bookid=b.bookid);
 
 -- ordering by average popularity score
 
-/*select b.language_code, avg ((r.ratings_count*r.average_rating)/(select avg(ratings_count) from ratings)) ) as pop_avg
-from (ratings as r join book as b on r.bookid=b.bookid)
-group by b.language_code
-order by pop_avg desc*/
+SELECT 
+	b.language_code, 
+	AVG ((r.ratings_count*r.average_rating)/(SELECT AVG(ratings_count) FROM ratings)) AS pop_avg
+FROM (ratings AS r JOIN book AS b ON r.bookid=b.bookid)
+GROUP BY b.language_code
+ORDER BY pop_avg DESC;
 
 -- looking at the x most popular's language
 
-/*select b.language_code, ((r.ratings_count*r.average_rating)/(select avg(ratings_count) from ratings)) as pop
-from (ratings as r join book as b on r.bookid=b.bookid)
-
-order by pop desc
-limit 10
-*/
+SELECT 
+	b.language_code, 
+	((r.ratings_count*r.average_rating)/(SELECT AVG(ratings_count) FROM ratings)) AS pop
+FROM (ratings AS r JOIN book AS b ON r.bookid=b.bookid)
+ORDER BY pop DESC
+LIMIT 10
