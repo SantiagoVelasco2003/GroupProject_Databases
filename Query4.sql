@@ -112,7 +112,7 @@ COPY (
     GROUP BY r.BookID, r.Ratings_Count, r.Average_Rating, rs.mean_reviews
     ORDER BY popularity_score DESC
 ) TO 'C:/Users/HP/Downloads/databases group project github materials/q5_code/output.csv' CSV HEADER;
-
+--CHANGE HERE TO YOUR DESIRED PATH
 
 
 
