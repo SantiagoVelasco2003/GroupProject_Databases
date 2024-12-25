@@ -1,6 +1,6 @@
 import pandas as pd
 
-# Load the input CSV file
+#Load the input CSV
 data = pd.read_csv('C:/Users/sanvt/OneDrive/Documentos/PostgreSQL/Group_P/PythonCodes/books_database.csv')
 
 #Make Sure integrity of File (Can be corrupted or with some bad entries)
@@ -22,15 +22,15 @@ if check_column == False:
     print(bad_values)
 """  
 
-# Generate IDs
+#Generate IDs
 data['Rat_ID'] = range(1, len(data) + 1)
 
-# Split Authors Column "/"
+#Split Authors Column "/"
 data['authors'] = data['authors'].fillna('')
 data = data.assign(authors=data['authors'].str.split('/'))
 data = data.explode('authors')
 
-# Duplicated Authors Management
+#Duplicated Authors Management
 data = data.reset_index(drop=True)
 unique_authors = data[['authors', 'Gender']].drop_duplicates().reset_index(drop=True)
 unique_authors['AuthorID'] = range(1, len(unique_authors) + 1)
@@ -53,7 +53,7 @@ if 'Pub_ID_x' in data.columns or 'Pub_ID_y' in data.columns:
     data = data.drop(columns=['Pub_ID_x'], errors='ignore')
     data = data.rename(columns={'Pub_ID_y': 'Pub_ID'})
 
-# Create DataFrames for SQL tables
+#Create DataFrames for SQL tables
 authors_df = unique_authors.rename(columns={'authors': 'author_name'})
 
 #Assign Default valur to Gender (Processed Later)
@@ -85,7 +85,7 @@ ratings_df = pd.DataFrame({
     'BookID': data['bookID']
 }).drop_duplicates(subset=['BookID'])
 
-# Save Files
+#Save
 authors_df.to_csv('C:/Users/sanvt/OneDrive/Documentos/PostgreSQL/Group_P/PythonCodes/authors.csv', sep=';', index=False)
 publisher_df.to_csv('C:/Users/sanvt/OneDrive/Documentos/PostgreSQL/Group_P/PythonCodes/publisher.csv', sep=';', index=False)
 book_df.to_csv('C:/Users/sanvt/OneDrive/Documentos/PostgreSQL/Group_P/PythonCodes/book.csv', sep=';', index=False)

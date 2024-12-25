@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-#Database
+#Database CHANGE ACCORDING TO SETUP
 conn = psycopg2.connect(
     dbname="Goodreads",
     user="postgres",
@@ -24,8 +24,7 @@ book_popularity AS (
         r.text_review_count,
         r.average_rating,
         r.ratings_count,
-        ((r.text_review_count + 
-            r.ratings_count) / (SELECT mean_count FROM mean_ratings_count) * r.average_rating) AS popularity_score
+        (r.ratings_count / (SELECT mean_count FROM mean_ratings_count) * r.average_rating) AS popularity_score
     FROM book b
     JOIN ratings r ON b.bookid = r.bookid
 ),
@@ -55,12 +54,13 @@ FROM author_popularity
 ORDER BY avg_popularity_score DESC;
 """
 df = pd.read_sql_query(query, conn)
+print(df.head(10))
 
 conn.close()
 
 #Plot
 plt.figure(figsize=(10, 6))
-sns.scatterplot(x='book_count', y='avg_popularity_score', data=df, color='red')
+sns.scatterplot(x='book_count', y='avg_popularity_score', data=df,alpha=0.2, color='red')
 plt.title('Books Popularity Score vs. Number of Books by Author')
 plt.xlabel('Number of Books by Author')
 plt.ylabel('Average Book Popularity Score/Author')

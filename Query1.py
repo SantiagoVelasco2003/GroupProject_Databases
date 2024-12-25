@@ -3,10 +3,11 @@ import psycopg2
 import matplotlib.pyplot as plt
 import numpy as np
 
+#Database CHANGE ACCORDING TO SETUP
 DATABASE_CONFIG = {
-    "dbname": "GroupProject",
+    "dbname": "Goodreads",
     "user": "postgres",
-    "password": "12345",
+    "password": "Boom",
     "host": "localhost",
     "port": 5432,
 }
@@ -43,30 +44,27 @@ order by
 	popularity_score DESC
     """
 
-# Execute the query
 try:
     cur.execute(query)
     results = cur.fetchall()
     
-    # Log the results to ensure data is fetched
     if not results:
         print("No data returned from the query.")
     else:
-        # Create a DataFrame for analysis
         df = pd.DataFrame(results, columns=['popularity_score', 'num_pages', 'bookid'])
         print("Query results:")
         print(df.head())
         
-        # Analyze the correlation between number of pages and popularity
+        #Get correlation
         correlation = df.corr(method='pearson').loc['popularity_score', 'num_pages']
         print(f"Correlation between num_pages and Popularity: {correlation}")
 except Exception as e:
     print("Error executing the query or processing results:", e)
 
-
 cur.close()
 conn.close()
 
+#Plot
 plt.figure(figsize=(10,6))
 plt.scatter(df['num_pages'],df['popularity_score'],alpha=0.6,label='Books')
 z = np.polyfit(df['num_pages'],df['popularity_score'],1)

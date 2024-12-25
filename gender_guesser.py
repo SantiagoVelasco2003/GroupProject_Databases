@@ -6,14 +6,13 @@ import psycopg2
 #Gender guesser
 d = gender.Detector()
 
-#Connect to database
 
 DATABASE_CONFIG = {
-    "dbname": "WhateverIwant",
+    "dbname": "Goodreads",
     "user": "postgres",
-    "password": "Josef2804!",
+    "password": "Boom",
     "host": "localhost",
-    "port": 5433,
+    "port": 5432,
 }
 
 
@@ -26,7 +25,6 @@ with conn.cursor() as cur:
     
     cur.execute(query)
 
-    # Fetch all the rows
     rows = cur.fetchall()
     author_ids = [row[0] for row in rows]
     author_names = [row[1] for row in rows]
@@ -36,7 +34,6 @@ with conn.cursor() as cur:
     first_words = [name.split()[0] for name in author_names]
 
     for text in first_words:
-    # Pass it as Unicode
         result_gender = d.get_gender(u"{}".format(text))
         result.append(result_gender)
 
@@ -46,7 +43,6 @@ with conn.cursor() as cur:
     for author_id, gender_value in zip(author_ids, result):
         cur.execute(update_query, (gender_value, author_id))
 
-# Commit the changes
     conn.commit()
     print("Gender information updated in the authors table.")
 

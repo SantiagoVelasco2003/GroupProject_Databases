@@ -6,14 +6,13 @@ import matplotlib.patches as patches
 import seaborn as sns
 
 
-#Connecting to SQL
-
+#Database CHANGE ACCORDING TO SETUP
 db_config = {
-    'dbname': 'GoodReadsDatabase',
+    'dbname': 'Goodreads',
     'user': 'postgres',
-    'password': 'Josef2804!',
+    'password': 'Boom',
     'host': 'localhost',
-    'port': 5433,
+    'port': 5432,
 }
 
 try:
@@ -45,12 +44,9 @@ CROSS JOIN
     mean_reviews mr;
 """
 
-# Execute the query and fetch data into a Pandas DataFrame
 df = pd.read_sql_query(query, conn)
 
-print(df)
-
-# Replace 'mostly male' with 'male' and 'mostly female' with 'female' and remove rows where gender is 'unknown'/'andy'
+#Replace 'mostly male' with 'male' and 'mostly female' with 'female' and remove rows where gender is 'unknown'/'andy'
 df['gender'] = df['gender'].replace({
     'mostly_male': 'male',
     'mostly_female': 'female'
@@ -58,36 +54,26 @@ df['gender'] = df['gender'].replace({
 df = df[df['gender'] != 'unknown']
 df = df[df['gender'] != 'andy']
 
-# Print the cleaned DataFrame
+#Cleaned DataFrame
 print(df)
 print("Genders after replacement:", df['gender'].unique())
 
 
-
-
-
-
-
-# Independent t-test
-
+#Independent t-test
 male_scores = df[df['gender'] == 'male']['popularity_score']
 female_scores = df[df['gender'] == 'female']['popularity_score']
 t_stat, p_value = stats.ttest_ind(male_scores, female_scores, equal_var=False)  
 
-# Print the results
 print(f"T-statistic: {t_stat:.2f}")
 print(f"P-value: {p_value:.3f}")
 
 
 def plot_gender_scores(df, y_limit=5, title="Mean Popularity Score by Gender"):
     
-    # Calculate mean and standard error for each gender
     grouped = df.groupby('gender')['popularity_score']
-    mean_scores = grouped.mean()  # This is a pandas Series
-    stderr_scores = grouped.sem()  # This is also a pandas Series
+    mean_scores = grouped.mean()  #This is a pandas Series
+    stderr_scores = grouped.sem()  #This is also a pandas Series
     
-
-    # Plotting the bar chart
     plt.figure(figsize=(8, 6))
     plt.ylim(0, y_limit)
     
@@ -97,12 +83,10 @@ def plot_gender_scores(df, y_limit=5, title="Mean Popularity Score by Gender"):
         palette=['white', 'white']
     )
     
-    # Borders
     for bar in plot.patches:
         x, y, width, height = bar.get_bbox().bounds
         plot.add_patch(patches.Rectangle((x, y), width, height, linewidth=2, edgecolor='black', facecolor='none'))
     
-    # Error Bars
     plt.errorbar(
         x=range(len(mean_scores.index)), 
         y=mean_scores, 
