@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load the Excel file
-file_name = r'C:\Users\User\Desktop\Suli\03_Graz\01_classes\04_Databases\01_exercise\plot.xlsx'  # File location
+file_name = r'C:\Users\User\Desktop\Suli\03_Graz\01_classes\04_Databases\01_exercise\plot.xlsx'  # CHANGE ACCORDING TO
 
 # Load data from the sheets
 plot1_data = pd.read_excel(file_name, sheet_name='plot1') #lang-pop
